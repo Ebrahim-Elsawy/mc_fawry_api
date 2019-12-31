@@ -31,6 +31,12 @@ $app->withFacades(true, [
 
 $app->withEloquent();
 
+$app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->middleware([
+    // ...
+    \Barryvdh\Cors\HandleCors::class,
+]);
+
 $app->configure('database');
 $app->configure('jwt');
 $app->configure('services');
