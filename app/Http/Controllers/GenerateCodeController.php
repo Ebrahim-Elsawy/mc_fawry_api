@@ -29,6 +29,14 @@ class GenerateCodeController extends Controller
 
             //inputs
             $amount = $request->input('amount');
+            $customerProfileId = $request->input('customerProfileId');
+            $customerMobile = $request->input('customerMobile');
+            $description = $request->input('description');
+            $itemId = $request->input('itemId');
+            $itemDescription = $request->input('itemDescription');
+            $price = $request->input('price');
+            $quantity = $request->input('quantity');
+            
             $amount = sprintf('%0.2f', $amount);
 
             $pin = mt_rand(1000000, 9999999)
@@ -53,7 +61,7 @@ class GenerateCodeController extends Controller
             $shaSignature = hash('sha256', "".env('FAWRY_MERCHANT_CODE')."" . $randomRefernceCode . 555 . "PAYATFAWRY" . $amount . "".env('FAWRY_SECRET_KEY')."");
 
             $client = new \GuzzleHttp\Client();
-            $sendBody = '{"merchantCode":"'.env('FAWRY_MERCHANT_CODE').'","merchantRefNum":"' . $randomRefernceCode . '","customerProfileId":"' . 555 . '","customerMobile":"' . 999 . '","paymentMethod":"PAYATFAWRY","amount":"' . $amount . '","currencyCode":"EGP","description":"the fawry code request","chargeItems":[ { "itemId":"888","description":"the fawry code request","price":"' . $amount . '","quantity":1} ],"signature":"' . $shaSignature . '"}';
+            $sendBody = '{"merchantCode":"'.env('FAWRY_MERCHANT_CODE').'","merchantRefNum":"' . $randomRefernceCode . '","customerProfileId":"' . $customerProfileId . '","customerMobile":"' . $customerMobile . '","paymentMethod":"PAYATFAWRY","amount":"' . $amount . '","currencyCode":"EGP","description":"'. $description .'","chargeItems":[ { "itemId":"'.$itemId.'","description":"'.$itemDescription.'","price":"' . $price . '","quantity":'.$quantity.'} ],"signature":"' . $shaSignature . '"}';
             $requestApi = $client->post(''.env('FAWRY_URL').'/ECommerceWeb/Fawry/payments/charge', [
                 'body' => $sendBody, 'headers' => [
                     'Content-Type' => 'application/json',
@@ -81,6 +89,14 @@ class GenerateCodeController extends Controller
     {
         $this->validate($request, [
             'amount' => 'required',
+            'customerProfileId' => 'required',
+            'customerMobile' => 'required',
+            'description' => 'required',
+            'itemId' => 'required',
+            'itemDescription' => 'required',
+            'price' => 'required',
+            'quantity' => 'required'
+
         ]);
     }
 
