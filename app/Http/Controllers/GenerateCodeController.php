@@ -44,6 +44,7 @@ class GenerateCodeController extends Controller
 
             // shuffle the result
             $randomRefernceCode = str_shuffle($pin);
+            $randomRefernceCode = $randomRefernceCode.''.$customerProfileId;
             
            /* do {
                 // generate a reference number on 2 * 7 digits + a random character
